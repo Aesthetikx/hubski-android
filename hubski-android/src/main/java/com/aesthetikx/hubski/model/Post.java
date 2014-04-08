@@ -76,16 +76,22 @@ public class Post {
     @Override
     public String toString() {
         String ret = "Post: " + title + " (User " + username + ", " + commentCount + " comments, " + shareCount + " shares), tags[";
-        for (int i = 0; i < tags.size(); i++) {
-            ret += tags.get(i);
-            if (i != tags.size() -1) ret += ", ";
-        }
+        ret += getTagsString();
         ret += "]";
         ret += ", comments: " + commentsUrl.toString();
         if (hasArticle()) {
             ret += ", article: " + articleUrl.toString();
         } else {
             ret += ", no article.";
+        }
+        return ret;
+    }
+
+    public String getTagsString() {
+        String ret = "";
+        for (int i = 0; i < tags.size(); i++) {
+            ret += tags.get(i);
+            if (i != tags.size() -1) ret += " ";
         }
         return ret;
     }

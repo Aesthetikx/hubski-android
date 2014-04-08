@@ -2,6 +2,7 @@ package com.aesthetikx.hubski.network;
 
 import android.os.AsyncTask;
 
+import com.aesthetikx.hubski.fragment.FeedFragment;
 import com.aesthetikx.hubski.model.Feed;
 
 import com.aesthetikx.hubski.parse.FeedParser;
@@ -9,6 +10,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -16,8 +18,16 @@ import java.net.URL;
 
 public class LoadFeedTask extends AsyncTask<URL, Void, Feed> {
 
+    private FeedFragment fragment;
+
+    public LoadFeedTask(FeedFragment fragment) {
+        this.fragment = fragment;
+        System.out.println("Created load feed task");
+    }
+
     @Override
     protected Feed doInBackground(URL... params) {
+        System.out.println("Starting load feed task");
         try {
             HttpClient httpClient = new DefaultHttpClient();
             HttpGet request = new HttpGet();
@@ -36,5 +46,10 @@ public class LoadFeedTask extends AsyncTask<URL, Void, Feed> {
             e.printStackTrace();
             return null;
         }
+    }
+
+    @Override
+    protected void onPostExecute(Feed feed) {
+        fragment.postResults(feed);
     }
 }
