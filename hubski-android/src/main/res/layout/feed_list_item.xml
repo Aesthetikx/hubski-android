@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Title"
+            android:id="@+id/text_view_title"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_alignTop="@+id/text_view_score"
+            android:layout_toRightOf="@+id/text_view_score"
+            android:maxLines="1"
+            android:ellipsize="end" android:enabled="true"/>
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="username"
+            android:id="@+id/text_view_username"
+            android:layout_below="@+id/text_view_title" android:layout_toRightOf="@+id/text_view_score"
+            android:textColor="#666"
+            android:layout_margin="3dp"/>
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="tags"
+            android:textColor="#999"
+            android:id="@+id/text_view_tags"
+            android:layout_alignBaseline="@+id/text_view_username" android:layout_alignBottom="@+id/text_view_username"
+            android:layout_toRightOf="@+id/text_view_username"/>
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="#"
+            android:id="@+id/text_view_score"
+            android:layout_alignParentTop="true" android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" android:layout_margin="3dp"/>
+</RelativeLayout>
