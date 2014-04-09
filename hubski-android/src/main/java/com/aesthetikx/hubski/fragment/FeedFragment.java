@@ -1,21 +1,21 @@
 package com.aesthetikx.hubski.fragment;
 
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
 import com.aesthetikx.hubski.FeedListAdapter;
+import com.aesthetikx.hubski.R;
 import com.aesthetikx.hubski.model.Feed;
-import com.aesthetikx.hubski.model.Post;
 import com.aesthetikx.hubski.network.LoadFeedTask;
 import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
 import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
 import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
 
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 
 public class FeedFragment extends ListFragment {
@@ -54,6 +54,14 @@ public class FeedFragment extends ListFragment {
                 .theseChildrenArePullable(getListView(), getListView().getEmptyView())
                 .listener(mListener)
                 .setup(mPullToRefreshLayout);
+
+        getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                FragmentManager manager = getActivity().getSupportFragmentManager();
+                manager.beginTransaction().replace(R.id.container, CommentsFragment.newInstance()).commit();
+            }
+        });
 
         try {
             new LoadFeedTask(FeedFragment.this).execute(new URL("http://www.hubski.com/"));
