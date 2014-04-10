@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import com.aesthetikx.hubski.FeedListAdapter;
 import com.aesthetikx.hubski.R;
 import com.aesthetikx.hubski.model.Feed;
+import com.aesthetikx.hubski.model.Post;
 import com.aesthetikx.hubski.network.LoadFeedTask;
 import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
 import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
@@ -58,8 +59,9 @@ public class FeedFragment extends ListFragment {
         getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Post post = (Post)mAdapter.getItem(position);
                 FragmentManager manager = getActivity().getSupportFragmentManager();
-                manager.beginTransaction().replace(R.id.container, CommentsFragment.newInstance()).commit();
+                manager.beginTransaction().replace(R.id.container, CommentsFragment.newInstance(post)).commit();
             }
         });
 

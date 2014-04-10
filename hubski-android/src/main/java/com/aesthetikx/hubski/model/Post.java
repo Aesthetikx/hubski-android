@@ -1,9 +1,10 @@
 package com.aesthetikx.hubski.model;
 
+import java.io.Serializable;
 import java.net.URL;
 import java.util.List;
 
-public class Post {
+public class Post implements Serializable {
 
     private String title;
     private String username;

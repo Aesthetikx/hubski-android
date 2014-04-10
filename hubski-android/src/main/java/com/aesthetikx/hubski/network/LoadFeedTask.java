@@ -1,16 +1,13 @@
 package com.aesthetikx.hubski.network;
 
 import android.os.AsyncTask;
-
 import com.aesthetikx.hubski.fragment.FeedFragment;
 import com.aesthetikx.hubski.model.Feed;
-
 import com.aesthetikx.hubski.parse.FeedParser;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
-import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
