@@ -40,7 +40,11 @@ public class CommentsFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.clear();
-        inflater.inflate(R.menu.comments, menu);
+        if (post.hasArticle()) {
+            inflater.inflate(R.menu.comments, menu);
+        } else {
+            inflater.inflate(R.menu.comments_no_article, menu);
+        }
     }
 
     @Override
