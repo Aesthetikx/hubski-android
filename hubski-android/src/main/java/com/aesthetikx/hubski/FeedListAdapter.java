@@ -40,19 +40,19 @@ public class FeedListAdapter extends BaseAdapter implements ListAdapter {
         if(convertView == null){
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflater.inflate(R.layout.feed_list_item, parent, false);
-            TextView title = (TextView)view.findViewById(R.id.text_view_title);
-            TextView username = (TextView)view.findViewById(R.id.text_view_username);
-            TextView score = (TextView)view.findViewById(R.id.text_view_score);
-            TextView tags = (TextView)view.findViewById(R.id.text_view_tags);
-
-            Post post = feed.getPosts().get(position);
-            title.setText(post.getTitle());
-            username.setText(post.getUsername());
-            score.setText(post.getShareCount() + "");
-            tags.setText(post.getTagsString());
         }else{
             view = convertView;
         }
+        TextView title = (TextView)view.findViewById(R.id.text_view_title);
+        TextView username = (TextView)view.findViewById(R.id.text_view_username);
+        TextView score = (TextView)view.findViewById(R.id.text_view_score);
+        TextView tags = (TextView)view.findViewById(R.id.text_view_tags);
+
+        Post post = feed.getPosts().get(position);
+        title.setText(post.getTitle());
+        username.setText(post.getUsername());
+        score.setText(post.getShareCount() + "");
+        tags.setText(post.getTagsString());
         return view;
     }
 
