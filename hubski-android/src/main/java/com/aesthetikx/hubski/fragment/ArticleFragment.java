@@ -57,7 +57,10 @@ public class ArticleFragment extends Fragment {
         switch (item.getItemId()) {
             case R.id.action_comments:
                 FragmentManager manager = getActivity().getSupportFragmentManager();
-                manager.beginTransaction().replace(R.id.container, CommentsFragment.newInstance(post)).commit();
+                manager.beginTransaction()
+                        .replace(R.id.container, CommentsFragment.newInstance(post))
+                        //.addToBackStack(null)
+                        .commit();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

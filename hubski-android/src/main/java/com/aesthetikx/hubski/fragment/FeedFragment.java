@@ -1,5 +1,6 @@
 package com.aesthetikx.hubski.fragment;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.ListFragment;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import com.aesthetikx.hubski.FeedListAdapter;
+import com.aesthetikx.hubski.MainActivity;
 import com.aesthetikx.hubski.R;
 import com.aesthetikx.hubski.model.Feed;
 import com.aesthetikx.hubski.model.Post;
@@ -26,9 +28,10 @@ public class FeedFragment extends ListFragment {
     private FeedListAdapter mAdapter;
     private List<String> data;
 
-    public static FeedFragment newInstance() {
+    public static FeedFragment newInstance(int type) {
         FeedFragment fragment = new FeedFragment();
         Bundle args = new Bundle();
+        args.putInt("feed_type", type);
         fragment.setArguments(args);
         return fragment;
     }
@@ -61,12 +64,20 @@ public class FeedFragment extends ListFragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Post post = (Post)mAdapter.getItem(position);
                 FragmentManager manager = getActivity().getSupportFragmentManager();
-                manager.beginTransaction().replace(R.id.container, CommentsFragment.newInstance(post)).commit();
+                manager.beginTransaction()
+                        .replace(R.id.container, CommentsFragment.newInstance(post))
+                        .addToBackStack(null)
+                        .commit();
             }
         });
 
         try {
-            new LoadFeedTask(FeedFragment.this).execute(new URL("http://www.hubski.com/"));
+            int type = getArguments().getInt("feed_type");
+            if (type == MainActivity.FRAGMENT_GLOBAL) {
+                new LoadFeedTask(FeedFragment.this).execute(new URL("http://www.hubski.com/global?id="));
+            } else {
+                new LoadFeedTask(FeedFragment.this).execute(new URL("http://www.hubski.com/"));
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -90,5 +101,11 @@ public class FeedFragment extends ListFragment {
         System.out.println("notifying");
         mAdapter.notifyDataSetChanged();
         System.out.println("done");
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        ((MainActivity) activity).onSectionAttached(getArguments().getInt("feed_type"));
     }
 }

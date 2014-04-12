@@ -29,6 +29,10 @@ public class MainActivity extends ActionBarActivity
      */
     private CharSequence mTitle;
 
+    public static final int FRAGMENT_GLOBAL = 0;
+    public static final int FRAGMENT_FEED = 1;
+    public static final int FRAGMENT_SETTINGS = 2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,7 +56,14 @@ public class MainActivity extends ActionBarActivity
         switch (position) {
             case 0:
                 fragmentManager.beginTransaction()
-                        .replace(R.id.container, FeedFragment.newInstance())
+                        .replace(R.id.container, FeedFragment.newInstance(FRAGMENT_GLOBAL))
+                        .addToBackStack(null)
+                        .commit();
+                break;
+            case 1:
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, FeedFragment.newInstance(FRAGMENT_FEED))
+                        .addToBackStack(null)
                         .commit();
                 break;
             default:
@@ -65,13 +76,13 @@ public class MainActivity extends ActionBarActivity
 
     public void onSectionAttached(int number) {
         switch (number) {
-            case 1:
+            case FRAGMENT_GLOBAL:
                 mTitle = getString(R.string.title_section1);
                 break;
-            case 2:
+            case FRAGMENT_FEED:
                 mTitle = getString(R.string.title_section2);
                 break;
-            case 3:
+            case FRAGMENT_SETTINGS:
                 mTitle = getString(R.string.title_section3);
                 break;
         }
