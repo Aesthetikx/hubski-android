@@ -5,7 +5,10 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.*;
-import android.widget.TextView;
+import android.webkit.WebChromeClient;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
+import android.widget.Toast;
 import com.aesthetikx.hubski.R;
 import com.aesthetikx.hubski.model.Post;
 
@@ -31,10 +34,15 @@ public class CommentsFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        /*
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         TextView textView = (TextView) rootView.findViewById(R.id.section_label);
         textView.setText("Comments for " + post.getTitle());
         return rootView;
+        */
+        WebView webview = prepareWebView();
+        webview.loadUrl(post.getCommentsUrl().toString());
+        return webview;
     }
 
     @Override
@@ -58,11 +66,32 @@ public class CommentsFragment extends Fragment {
         switch (item.getItemId()) {
             case R.id.action_article:
                 FragmentManager manager = getActivity().getSupportFragmentManager();
-                manager.beginTransaction().replace(R.id.container, ArticleFragment.newInstance(post)).commit();
+                manager.beginTransaction()
+                        .replace(R.id.container, ArticleFragment.newInstance(post))
+                        //.addToBackStack(null)
+                        .commit();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private WebView prepareWebView() {
+        WebView webview = new WebView(getActivity().getApplicationContext());
+        webview.getSettings().setJavaScriptEnabled(true);
+        webview.getSettings().setBuiltInZoomControls(true);
+        webview.setWebChromeClient(new WebChromeClient() {
+            public void onProgressChanged(WebView view, int progress) {
+                //TODO handle progress
+            }
+        });
+        webview.setWebViewClient(new WebViewClient() {
+            public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+                Toast.makeText(getActivity(), description, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        return webview;
     }
 }
 
