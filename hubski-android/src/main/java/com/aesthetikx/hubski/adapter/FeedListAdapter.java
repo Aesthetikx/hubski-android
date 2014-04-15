@@ -1,4 +1,4 @@
-package com.aesthetikx.hubski;
+package com.aesthetikx.hubski.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListAdapter;
 import android.widget.TextView;
+import com.aesthetikx.hubski.R;
 import com.aesthetikx.hubski.model.Feed;
 import com.aesthetikx.hubski.model.Post;
 

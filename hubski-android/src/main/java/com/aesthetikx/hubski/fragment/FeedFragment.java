@@ -8,7 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import com.aesthetikx.hubski.FeedListAdapter;
+import com.aesthetikx.hubski.adapter.FeedListAdapter;
 import com.aesthetikx.hubski.MainActivity;
 import com.aesthetikx.hubski.R;
 import com.aesthetikx.hubski.model.Feed;
