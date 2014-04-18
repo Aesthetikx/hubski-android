@@ -1,9 +1,12 @@
 package com.aesthetikx.hubski.model;
 
+import com.aesthetikx.hubski.adapter.BaseTreeListItem;
+import com.aesthetikx.hubski.adapter.TreeListItem;
+
 import java.net.URL;
 import java.util.List;
 
-public class Comment {
+public class Comment extends BaseTreeListItem implements TreeListItem {
 
     private String username;
     private URL userLink;
@@ -11,18 +14,16 @@ public class Comment {
     private String body;
     private String age;
     private int score;
-    private Comment parent;
     private List<Comment> children;
 
-    public Comment(String username, URL userLink, URL link, String body, String age, int score,
-                   Comment parent, List<Comment> children) {
+    public Comment(String username, URL userLink, URL link, String body, String age, int score, List<Comment> children, int depth) {
+        super(children, true, true, depth);
         this.username = username;
         this.userLink = userLink;
         this.link = link;
         this.body = body;
         this.age = age;
         this.score = score;
-        this.parent = parent;
         this.children = children;
     }
 
@@ -50,12 +51,17 @@ public class Comment {
         return score;
     }
 
-    public Comment getParent() {
-        return parent;
-    }
-
     public List<Comment> getChildren() {
         return children;
+    }
+
+    public void print(int depth) {
+        String tab = "";
+        for (int i = 0; i < depth; ++i) tab += "\t";
+        System.out.println(tab + getUsername());
+        for (Comment child: getChildren()) {
+            child.print(depth + 1);
+        }
     }
 
 }
