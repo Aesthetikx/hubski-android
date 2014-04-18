@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFF">
+
+    <FrameLayout
+            android:id="@+id/spacer"
+            android:layout_width="5dp"
+            android:layout_height="match_parent"
+            android:background="#DDD" />
+
+    <FrameLayout
+            android:id="@+id/color_bar"
+            android:layout_width="5dp"
+            android:layout_height="match_parent"
+            android:background="#0FF"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/spacer"/>
+
+    <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/image_view_share_count"
+            android:layout_alignParentTop="true"
+            android:layout_alignLeft="@+id/webView"
+            android:layout_alignStart="@+id/webView"
+            android:layout_above="@+id/webView"
+            android:layout_margin="2dp"/>
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="by"
+            android:id="@+id/text_view_by"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/image_view_share_count"
+            android:layout_margin="2dp"
+            android:textColor="#555"/>
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="username"
+            android:id="@+id/text_view_username"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/text_view_by"
+            android:layout_margin="2dp"/>
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="5 min ago"
+            android:id="@+id/text_view_age"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/text_view_username"
+            android:layout_margin="2dp"
+            android:textColor="#555"/>
+
+    <WebView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/webView"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/text_view_by"
+            android:layout_toRightOf="@+id/color_bar"/>
+
+</RelativeLayout>
