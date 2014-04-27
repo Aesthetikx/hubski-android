@@ -4,7 +4,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFF">
+    android:background="@null">
 
     <FrameLayout
             android:id="@+id/spacer"
@@ -18,7 +18,8 @@
             android:layout_height="match_parent"
             android:background="#0FF"
             android:layout_alignParentTop="true"
-            android:layout_toRightOf="@+id/spacer"/>
+            android:layout_toRightOf="@+id/spacer"
+            android:layout_alignBottom="@+id/text_view_hidden_count"/>
 
     <TextView
             android:layout_width="wrap_content"

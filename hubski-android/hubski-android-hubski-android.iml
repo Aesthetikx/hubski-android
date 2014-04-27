@@ -70,11 +70,11 @@
     </content>
     <orderEntry type="jdk" jdkName="Android API 19 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" exported="" name="ComGithubChrisbanesActionbarpulltorefreshLibrary099.aar" level="project" />
+    <orderEntry type="library" exported="" name="ComGithubCastorflexSmoothprogressbarLibrary040.aar" level="project" />
     <orderEntry type="library" exported="" name="support-v4-19.1.0" level="project" />
     <orderEntry type="library" exported="" name="jsoup-1.7.3" level="project" />
-    <orderEntry type="library" exported="" name="ComGithubCastorflexSmoothprogressbarLibrary020.aar" level="project" />
     <orderEntry type="library" exported="" name="ComAndroidSupportAppcompatV71910.aar" level="project" />
-    <orderEntry type="library" exported="" name="ComGithubChrisbanesActionbarpulltorefreshLibrary093.aar" level="project" />
   </component>
 </module>
 

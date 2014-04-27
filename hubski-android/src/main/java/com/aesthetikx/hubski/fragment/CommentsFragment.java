@@ -5,16 +5,22 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.*;
-import android.webkit.WebChromeClient;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
-import android.widget.Toast;
+import android.widget.ListView;
 import com.aesthetikx.hubski.R;
+import com.aesthetikx.hubski.adapter.CommentListAdapter;
+import com.aesthetikx.hubski.adapter.TreeItemClickListener;
+import com.aesthetikx.hubski.model.Comment;
 import com.aesthetikx.hubski.model.Post;
+import com.aesthetikx.hubski.network.LoadCommentsTask;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CommentsFragment extends Fragment {
 
     private Post post;
+    private CommentListAdapter adapter;
+    private ListView list;
 
     public static CommentsFragment newInstance(Post post) {
         CommentsFragment fragment = new CommentsFragment();
@@ -34,15 +40,16 @@ public class CommentsFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        /*
-        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-        TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-        textView.setText("Comments for " + post.getTitle());
-        return rootView;
-        */
-        WebView webview = prepareWebView();
-        webview.loadUrl(post.getCommentsUrl().toString());
-        return webview;
+        list = (ListView) inflater.inflate(R.layout.fragment_comments, container, false);
+        adapter = new CommentListAdapter(getActivity().getBaseContext());
+        list.setAdapter(adapter);
+        return list;
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        new LoadCommentsTask(CommentsFragment.this).execute(post.getCommentsUrl());
     }
 
     @Override
@@ -76,22 +83,19 @@ public class CommentsFragment extends Fragment {
         }
     }
 
-    private WebView prepareWebView() {
-        WebView webview = new WebView(getActivity().getApplicationContext());
-        webview.getSettings().setJavaScriptEnabled(true);
-        webview.getSettings().setBuiltInZoomControls(true);
-        webview.setWebChromeClient(new WebChromeClient() {
-            public void onProgressChanged(WebView view, int progress) {
-                //TODO handle progress
-            }
-        });
-        webview.setWebViewClient(new WebViewClient() {
-            public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
-                Toast.makeText(getActivity(), description, Toast.LENGTH_SHORT).show();
-            }
-        });
+    private void flattenComment(Comment comment, List<Comment> comments) {
+        comments.add(comment);
+        for (Comment child: comment.getChildren()) {
+            flattenComment(child, comments);
+        }
+    }
 
-        return webview;
+    public void postResults(Comment rootComment) {
+        List<Comment> comments = new ArrayList<>();
+        flattenComment(rootComment, comments);
+        adapter.setComments(comments);
+        adapter.notifyDataSetChanged();
+        list.setOnItemClickListener(new TreeItemClickListener(comments, adapter));
     }
 }
 
