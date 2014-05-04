@@ -1,5 +1,16 @@
 package com.aesthetikx.hubski.model;
 
+import android.content.Context;
+import android.graphics.Color;
+import android.text.Html;
+import android.util.TypedValue;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import com.aesthetikx.hubski.R;
 import com.aesthetikx.hubski.adapter.BaseTreeListItem;
 import com.aesthetikx.hubski.adapter.TreeListItem;
 
@@ -64,4 +75,46 @@ public class Comment extends BaseTreeListItem implements TreeListItem {
         }
     }
 
+    @Override
+    public View getExpandedView(LayoutInflater inflater, ViewGroup parent) {
+        View view;
+        view = inflater.inflate(R.layout.comment_list_item, parent, false);
+        TextView tv = (TextView) view.findViewById(R.id.text_view_username);
+        tv.setText(getUsername());
+
+        int fiveDpi = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, inflater.getContext().getResources().getDisplayMetrics());
+
+        FrameLayout spacer = (FrameLayout) view.findViewById(R.id.spacer);
+        spacer.setLayoutParams(new RelativeLayout.LayoutParams(fiveDpi * getDepth(), RelativeLayout.LayoutParams.MATCH_PARENT));
+
+        TextView textViewBody = (TextView) view.findViewById(R.id.text_view_body);
+        textViewBody.setText(Html.fromHtml(getBody()));
+
+        View colorbar = view.findViewById(R.id.color_bar);
+        colorbar.setBackgroundColor(Color.rgb(0, 255, 255));
+        return view;
+    }
+
+    @Override
+    public View getCollapsedView(LayoutInflater inflater, ViewGroup parent) {
+        View view;
+        view = inflater.inflate(R.layout.comment_list_item_collapsed, parent, false);
+
+        TextView tv = (TextView) view.findViewById(R.id.text_view_hidden_count);
+        int hiddenCount = getChildCount() + 1;
+        if (hiddenCount == 1) {
+            tv.setText(hiddenCount + " comment hidden");
+        } else {
+            tv.setText(hiddenCount + " comments hidden");
+        }
+
+        int fiveDpi = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, inflater.getContext().getResources().getDisplayMetrics());
+
+        FrameLayout spacer = (FrameLayout) view.findViewById(R.id.spacer);
+        spacer.setLayoutParams(new RelativeLayout.LayoutParams(fiveDpi * getDepth(), RelativeLayout.LayoutParams.MATCH_PARENT));
+
+        View colorbar = view.findViewById(R.id.color_bar);
+        colorbar.setBackgroundColor(Color.rgb(0, 255, 255));
+        return view;
+    }
 }

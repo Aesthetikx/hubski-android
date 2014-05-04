@@ -2,6 +2,8 @@ package com.aesthetikx.hubski.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.text.Html;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,20 +59,19 @@ public class CommentListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Comment comment = (Comment) getItem(position);//comments.get(position);
-        System.out.println(position + "-" + comment.getUsername() + " -v " + comment.isVisible() + " -e " + comment.isExpanded());
-        View view;
+        Comment comment = (Comment) getItem(position);
+
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        view = inflater.inflate(R.layout.comment_list_item, parent, false);
-        TextView tv = (TextView) view.findViewById(R.id.text_view_username);
-        tv.setText(comment.getUsername());
-        FrameLayout spacer = (FrameLayout) view.findViewById(R.id.spacer);
-        spacer.setLayoutParams(new RelativeLayout.LayoutParams(40 * comment.getDepth(), RelativeLayout.LayoutParams.MATCH_PARENT));
-        WebView webview = (WebView) view.findViewById(R.id.web_view);
-        webview.loadDataWithBaseURL("https://hubski.com", comment.getBody(), "text/html", "UTF-8", "");
-        View colorbar = view.findViewById(R.id.color_bar);
-        colorbar.setBackgroundColor(Color.rgb(0,255,255));
+
+        View view;
+        if (comment.isExpanded()) {
+            view = comment.getExpandedView(inflater, parent);
+        } else {
+            view = comment.getCollapsedView(inflater, parent);
+        }
+
         view.setVisibility(comment.isVisible() ? View.VISIBLE : View.GONE);
+
         return view;
     }
 }

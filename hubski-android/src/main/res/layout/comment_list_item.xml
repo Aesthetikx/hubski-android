@@ -64,10 +64,10 @@
                 android:layout_margin="2dp"
                 android:textColor="#555"/>
 
-        <WebView
+        <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/web_view"
+                android:id="@+id/text_view_body"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentLeft="true"

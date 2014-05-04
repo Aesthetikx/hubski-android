@@ -2,7 +2,7 @@ package com.aesthetikx.hubski.adapter;
 
 import java.util.List;
 
-public class BaseTreeListItem implements TreeListItem {
+public abstract class BaseTreeListItem implements TreeListItem {
 
     private boolean visible;
     private boolean expanded;
@@ -53,6 +53,15 @@ public class BaseTreeListItem implements TreeListItem {
     @Override
     public int getDepth() {
         return depth;
+    }
+
+    @Override
+    public int getChildCount() {
+        int count = 0;
+        for (TreeListItem child : children) {
+            count += (1 + child.getChildCount());
+        }
+        return count;
     }
 
 }
