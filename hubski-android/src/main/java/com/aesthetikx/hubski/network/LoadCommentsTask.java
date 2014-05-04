@@ -46,7 +46,7 @@ public class LoadCommentsTask extends AsyncTask<URL, Void, Comment> {
 
     @Override
     protected void onPostExecute(Comment comment) {
-        comment.print(0);
+        comment.print();
         fragment.postResults(comment);
     }
 }

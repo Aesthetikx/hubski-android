@@ -55,12 +55,12 @@ public class Comment extends BaseTreeListItem implements TreeListItem {
         return children;
     }
 
-    public void print(int depth) {
+    public void print() {
         String tab = "";
-        for (int i = 0; i < depth; ++i) tab += "\t";
+        for (int i = 0; i < getDepth(); ++i) tab += "\t";
         System.out.println(tab + getUsername());
         for (Comment child: getChildren()) {
-            child.print(depth + 1);
+            child.print();
         }
     }
 
