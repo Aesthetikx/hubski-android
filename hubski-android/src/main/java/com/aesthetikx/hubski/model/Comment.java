@@ -1,6 +1,5 @@
 package com.aesthetikx.hubski.model;
 
-import android.content.Context;
 import android.graphics.Color;
 import android.text.Html;
 import android.util.TypedValue;
@@ -26,6 +25,14 @@ public class Comment extends BaseTreeListItem implements TreeListItem {
     private String age;
     private int score;
     private List<Comment> children;
+
+    private int barColors[] = {
+            Color.rgb(68, 193, 103),
+            Color.rgb(156, 208, 113),
+            Color.rgb(60, 180, 132),
+            Color.rgb(133, 214, 179),
+            Color.rgb(59, 158, 176)
+    };
 
     public Comment(String username, URL userLink, URL link, String body, String age, int score, List<Comment> children, int depth) {
         super(children, true, true, depth);
@@ -75,6 +82,12 @@ public class Comment extends BaseTreeListItem implements TreeListItem {
         }
     }
 
+    private int getBarColor() {
+        int index = getDepth();
+        index %= barColors.length;
+        return barColors[index];
+    }
+
     @Override
     public View getExpandedView(LayoutInflater inflater, ViewGroup parent) {
         View view;
@@ -91,7 +104,7 @@ public class Comment extends BaseTreeListItem implements TreeListItem {
         textViewBody.setText(Html.fromHtml(getBody()));
 
         View colorbar = view.findViewById(R.id.color_bar);
-        colorbar.setBackgroundColor(Color.rgb(0, 255, 255));
+        colorbar.setBackgroundColor(getBarColor());
         return view;
     }
 
@@ -114,7 +127,7 @@ public class Comment extends BaseTreeListItem implements TreeListItem {
         spacer.setLayoutParams(new RelativeLayout.LayoutParams(fiveDpi * getDepth(), RelativeLayout.LayoutParams.MATCH_PARENT));
 
         View colorbar = view.findViewById(R.id.color_bar);
-        colorbar.setBackgroundColor(Color.rgb(0, 255, 255));
+        colorbar.setBackgroundColor(getBarColor());
         return view;
     }
 }
