@@ -1,6 +1,7 @@
 package com.aesthetikx.hubski.parse;
 
 import com.aesthetikx.hubski.model.Comment;
+import com.aesthetikx.hubski.model.RootComment;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -45,7 +46,15 @@ public class CommentParser {
             age = doc.select("div.whole > div > div.sub > div.postcontent > div.subtitle > div.shareline").first().html().split("</span>&nbsp;")[1].split("&nbsp")[0].trim();
         } catch (Exception e) { }
         int score = 5;
-        return new Comment(username, userLink, link, body, age, score, children, 0);
+
+        List<String> tags = new ArrayList<>();
+        Elements tagElements = doc.select("div.subtitle span > a[href~=(tag*)]");
+        for (Element tagElement : tagElements) {
+            tags.add(tagElement.text());
+        }
+
+        String title = doc.select("div.title > span > a").first().text();
+        return new RootComment(title, tags, username, userLink, link, body, age, score, children, 0);
     }
 
     private static Comment getComment(Element outerComm, Element subCom, int depth) {
