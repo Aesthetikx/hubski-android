@@ -31,7 +31,10 @@ public class CommentParser {
     }
 
     private static Comment getRootComment(Document doc, List<Comment> children) {
+        /* Username */
         String username = doc.select("div.whole > div > div.sub > div.postcontent > div.subtitle > div.shareline > span#username > a").first().text();
+
+        /* URLS */
         URL userLink = null;
         URL link = null;
         try {
@@ -40,20 +43,34 @@ public class CommentParser {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        String body = doc.select("div.whole > div > div.wholepub > div.pubcontent > div.pubtext").first().text();
+
+        /* Body */
+        String body;
+        try {
+            body = doc.select("div.whole > div > div.wholepub > div.pubcontent > div.pubtext").first().text();
+        } catch (Exception e) {
+            body = "";
+        }
+
+        /* Age */
         String age = "50 years";
         try {
             age = doc.select("div.whole > div > div.sub > div.postcontent > div.subtitle > div.shareline").first().html().split("</span>&nbsp;")[1].split("&nbsp")[0].trim();
         } catch (Exception e) { }
+
+        /* Score */
         int score = 5;
 
+        /* Tags */
         List<String> tags = new ArrayList<>();
         Elements tagElements = doc.select("div.subtitle span > a[href~=(tag*)]");
         for (Element tagElement : tagElements) {
             tags.add(tagElement.text());
         }
 
+        /* Title */
         String title = doc.select("div.title > span > a").first().text();
+
         return new RootComment(title, tags, username, userLink, link, body, age, score, children, 0);
     }
 
