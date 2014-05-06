@@ -92,8 +92,12 @@ public class Comment extends BaseTreeListItem implements TreeListItem {
     public View getExpandedView(LayoutInflater inflater, ViewGroup parent) {
         View view;
         view = inflater.inflate(R.layout.comment_list_item, parent, false);
-        TextView tv = (TextView) view.findViewById(R.id.text_view_username);
-        tv.setText(getUsername());
+
+        TextView textViewUsername = (TextView) view.findViewById(R.id.text_view_username);
+        textViewUsername.setText(getUsername());
+
+        TextView textViewAge = (TextView) view.findViewById(R.id.text_view_age);
+        textViewAge.setText(getAge());
 
         int fiveDpi = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, inflater.getContext().getResources().getDisplayMetrics());
 

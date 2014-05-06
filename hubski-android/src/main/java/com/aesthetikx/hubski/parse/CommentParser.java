@@ -41,6 +41,9 @@ public class CommentParser {
         }
         String body = doc.select("div.whole > div > div.wholepub > div.pubcontent > div.pubtext").first().text();
         String age = "50 years";
+        try {
+            age = doc.select("div.whole > div > div.sub > div.postcontent > div.subtitle > div.shareline").first().html().split("</span>&nbsp;")[1].split("&nbsp")[0].trim();
+        } catch (Exception e) { }
         int score = 5;
         return new Comment(username, userLink, link, body, age, score, children, 0);
     }
@@ -63,7 +66,10 @@ public class CommentParser {
             e.printStackTrace();
         }
         String body = outerComm.select("div > div#comtext.comm").text();
-        String age = "TODO";
+        String age = "50 years ago";
+        try {
+            age = outerComm.select("div > span.subhead").first().html().split("</span>")[1].split("&nbsp")[0].trim();
+        } catch (Exception e) { }
 
         Element subSubCom = subCom.select("div.subsubcom").first();
         List<Comment> children = parseSubSubCom(subSubCom, depth + 1);
