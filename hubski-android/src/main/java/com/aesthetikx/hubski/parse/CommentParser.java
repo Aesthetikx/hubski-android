@@ -30,18 +30,19 @@ public class CommentParser {
     }
 
     private static Comment getRootComment(Document doc, List<Comment> children) {
+        String username = doc.select("div.whole > div > div.sub > div.postcontent > div.subtitle > div.shareline > span#username > a").first().text();
         URL userLink = null;
         URL link = null;
         try {
-            userLink = new URL("http://www.TODO.com");
+            userLink = new URL("http://www.hubski.com/user?id=" + username);
             link = new URL("http://www.TODO.com");
         } catch (Exception e) {
             e.printStackTrace();
         }
-        String body = "Root Comment";
+        String body = doc.select("div.whole > div > div.wholepub > div.pubcontent > div.pubtext").first().text();
         String age = "50 years";
         int score = 5;
-        return new Comment("cat", userLink, link, body, age, score, children, 0);
+        return new Comment(username, userLink, link, body, age, score, children, 0);
     }
 
     private static Comment getComment(Element outerComm, Element subCom, int depth) {
