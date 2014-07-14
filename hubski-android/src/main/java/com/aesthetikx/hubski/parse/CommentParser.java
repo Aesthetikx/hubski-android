@@ -53,7 +53,7 @@ public class CommentParser {
         }
 
         /* Age */
-        String age = "50 years";
+        String age = "(unknown age)";
         try {
             age = doc.select("div.whole > div > div.sub > div.postcontent > div.subtitle > div.shareline").first().html().split("</span>&nbsp;")[1].split("&nbsp")[0].trim();
         } catch (Exception e) { }
@@ -75,31 +75,35 @@ public class CommentParser {
     }
 
     private static Comment getComment(Element outerComm, Element subCom, int depth) {
-        int score = Integer.parseInt(outerComm.select("div.plusminus > span.score a > img")
-                .get(0).attr("class").substring(0, 1));
-        Element userElement = outerComm.select("div > span.subhead > span#username > a").get(0);
-        String username = userElement.text();
+        int score = Integer.parseInt(outerComm.select("div.plusminus > span.score a > img").get(0).attr("class").substring(0, 1));
+
+        Element userElement = null; 
+        String userName = "(unkown username)";
         URL userLink = null;
-        try {
+        try{
+            userElement = outerComm.select("div > div.subhead > span#username > a").get(0);
+            userName = userElement.text();
             userLink = new URL("http://www.hubski.com/" + userElement.attr("href"));
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         URL link = null;
         try {
-            link = new URL("http://www.hubski.com/" + outerComm.select("div > span.subhead > a").attr("href"));
+            link = new URL("http://www.hubski.com/" + outerComm.select("div > div.subhead > a").attr("href"));
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         String body = outerComm.select("div > div#comtext.comm").text();
-        String age = "50 years ago";
+        String age = "(unknown age)";
         try {
-            age = outerComm.select("div > span.subhead").first().html().split("</span>")[1].split("&nbsp")[0].trim();
+            age = outerComm.select("div > div.subhead").first().html().split("</span>")[1].split("&nbsp")[0].trim();
         } catch (Exception e) { }
 
         Element subSubCom = subCom.select("div.subsubcom").first();
         List<Comment> children = parseSubSubCom(subSubCom, depth + 1);
-        return new Comment(username, userLink, link, body, age, score, children, depth);
+        return new Comment(userName, userLink, link, body, age, score, children, depth);
     }
 
     private static List<Comment> parseSubSubCom(Element parentSubSubCom, int depth) {
