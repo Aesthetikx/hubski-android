@@ -106,6 +106,6 @@ public class FeedFragment extends ListFragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        ((MainActivity) activity).onSectionAttached(getArguments().getInt("feed_type"));
+        //((MainActivity) activity).onSectionAttached(getArguments().getInt("feed_type"));
     }
 }
