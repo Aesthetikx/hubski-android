@@ -59,6 +59,9 @@ public class FeedFragment extends ListFragment {
                 .listener(mListener)
                 .setup(mPullToRefreshLayout);
 
+        getListView().setDivider(null);
+        getListView().setDividerHeight(0);
+
         getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
