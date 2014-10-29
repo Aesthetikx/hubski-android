@@ -76,7 +76,7 @@ public class FeedParser {
     private static List<String> getTags(Element postContent) {
         List<String> tags = new ArrayList<>();
         try {
-            Elements tagElements = postContent.select("div.subtitle > span > span > a");
+            Elements tagElements = postContent.select("div.subtitle > span a");
             for (Element tag: tagElements) {
                 tags.add(tag.text());
             }
