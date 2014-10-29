@@ -11,10 +11,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.support.v4.widget.DrawerLayout;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import com.aesthetikx.hubski.fragment.FeedFragment;
+import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 public class MainActivity extends ActionBarActivity
     implements ActionBar.OnNavigationListener {
@@ -42,6 +44,10 @@ public class MainActivity extends ActionBarActivity
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         actionBar.setListNavigationCallbacks(adapter, this);
+
+        SystemBarTintManager tintManager = new SystemBarTintManager(this);
+        tintManager.setStatusBarTintEnabled(true);
+        tintManager.setTintColor(getResources().getColor(R.color.primary));
     }
 
     @Override
