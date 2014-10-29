@@ -3,7 +3,9 @@ package com.aesthetikx.hubski.fragment;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.ListFragment;
+import android.support.v4.app.Fragment;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,16 +19,18 @@ import com.aesthetikx.hubski.network.LoadFeedTask;
 import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
 import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
 import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
+import uk.co.senab.actionbarpulltorefresh.library.viewdelegates.ScrollYDelegate;
 
 import java.net.URL;
 import java.util.List;
 
-public class FeedFragment extends ListFragment {
+public class FeedFragment extends Fragment {
 
     private PullToRefreshLayout mPullToRefreshLayout;
-    private CustomListener mListener;
     private FeedListAdapter mAdapter;
     private List<String> data;
+    private LinearLayoutManager mLayoutManager;
+    private RecyclerView recyclerView;
 
     public static FeedFragment newInstance(int type) {
         FeedFragment fragment = new FeedFragment();
@@ -38,41 +42,24 @@ public class FeedFragment extends ListFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
-        mAdapter = new FeedListAdapter(getActivity().getBaseContext());
-        setListAdapter(mAdapter);
-        return super.onCreateView(inflater, container, savedInstanceState);
+        View view = inflater.inflate(R.layout.fragment_feed, container, false);
+        mPullToRefreshLayout = (PullToRefreshLayout) view.findViewById(R.id.ptr_layout);
+        recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
+        mLayoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(mLayoutManager);
+
+        ActionBarPullToRefresh.from(getActivity())
+                .allChildrenArePullable()
+                .listener(new CustomListener())
+                .useViewDelegate(RecyclerView.class, new ScrollYDelegate())
+                .setup(mPullToRefreshLayout);
+
+        return view;
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        ViewGroup viewGroup = (ViewGroup) view;
-
-        mPullToRefreshLayout = new PullToRefreshLayout(viewGroup.getContext());
-
-        mListener = new CustomListener();
-
-        ActionBarPullToRefresh.from(getActivity())
-                .insertLayoutInto(viewGroup)
-                .theseChildrenArePullable(getListView(), getListView().getEmptyView())
-                .listener(mListener)
-                .setup(mPullToRefreshLayout);
-
-        getListView().setDivider(null);
-        getListView().setDividerHeight(0);
-
-        getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Post post = (Post)mAdapter.getItem(position);
-                FragmentManager manager = getActivity().getSupportFragmentManager();
-                manager.beginTransaction()
-                        .replace(R.id.container, CommentsFragment.newInstance(post))
-                        .addToBackStack(null)
-                        .commit();
-            }
-        });
 
         try {
             int type = getArguments().getInt("feed_type");
@@ -99,16 +86,18 @@ public class FeedFragment extends ListFragment {
 
     public void postResults(Feed feed) {
         System.out.println("Got feed of size " + feed.getPosts().size());
-        mAdapter.setFeed(feed);
+        mAdapter = new FeedListAdapter(feed, new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Post post = (Post) view.getTag();
+                FragmentManager manager = getActivity().getSupportFragmentManager();
+                manager.beginTransaction()
+                        .replace(R.id.container, CommentsFragment.newInstance(post))
+                        .addToBackStack(null)
+                        .commit();
+            }
+        });
+        recyclerView.setAdapter(mAdapter);
         mPullToRefreshLayout.setRefreshComplete();
-        System.out.println("notifying");
-        mAdapter.notifyDataSetChanged();
-        System.out.println("done");
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        //((MainActivity) activity).onSectionAttached(getArguments().getInt("feed_type"));
     }
 }

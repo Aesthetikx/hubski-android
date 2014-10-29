@@ -1,68 +1,62 @@
 package com.aesthetikx.hubski.adapter;
 
-import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.ListAdapter;
 import android.widget.TextView;
 import com.aesthetikx.hubski.R;
 import com.aesthetikx.hubski.model.Feed;
 import com.aesthetikx.hubski.model.Post;
 
-public class FeedListAdapter extends BaseAdapter implements ListAdapter {
+public class FeedListAdapter extends RecyclerView.Adapter<FeedListAdapter.ViewHolder> {
 
     private Feed feed;
-    private Context context;
+    private OnClickListener clickListener;
 
-    public FeedListAdapter(Context context) {
-        this.context = context;
+    public FeedListAdapter(Feed feed, OnClickListener clickListener) {
+        this.feed = feed;
+        this.clickListener = clickListener;
     }
 
     @Override
-    public int getCount() {
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.feed_list_item, parent, false);
+         view.setOnClickListener(clickListener);
+         return new ViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(final ViewHolder holder, int position) {
+        Post post = feed.getPosts().get(position);
+
+        holder.itemView.setTag(post);
+
+        holder.title.setText(post.getTitle());
+        holder.username.setText(post.getUsername());
+        holder.score.setText(post.getShareCount() + "");
+        holder.tags.setText(post.getTagsString());
+    }
+
+    @Override
+    public int getItemCount() {
         return (feed == null) ? 0 : feed.getPosts().size();
     }
 
-    @Override
-    public Object getItem(int position) {
-        return feed.getPosts().get(position);
-    }
+    public static class ViewHolder extends RecyclerView.ViewHolder {
 
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
+        public TextView title;
+        public TextView username;
+        public TextView score;
+        public TextView tags;
 
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        View view;
-        if(convertView == null){
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = inflater.inflate(R.layout.feed_list_item, parent, false);
-        }else{
-            view = convertView;
+        public ViewHolder(View view) {
+            super(view);
+            title = (TextView)view.findViewById(R.id.text_view_title);
+            username = (TextView)view.findViewById(R.id.text_view_username);
+            score = (TextView)view.findViewById(R.id.text_view_score);
+            tags = (TextView)view.findViewById(R.id.text_view_tags);
         }
-        TextView title = (TextView)view.findViewById(R.id.text_view_title);
-        TextView username = (TextView)view.findViewById(R.id.text_view_username);
-        TextView score = (TextView)view.findViewById(R.id.text_view_score);
-        TextView tags = (TextView)view.findViewById(R.id.text_view_tags);
-
-        Post post = feed.getPosts().get(position);
-        title.setText(post.getTitle());
-        username.setText(post.getUsername());
-        score.setText(post.getShareCount() + "");
-        tags.setText(post.getTagsString());
-        return view;
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return feed.getPosts().isEmpty();
-    }
-
-    public void setFeed(Feed feed) {
-        this.feed = feed;
     }
 }
